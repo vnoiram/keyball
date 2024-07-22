@@ -7,6 +7,10 @@
 #include "vnoiram.h"
 #include "keymap.h"
 
+#ifdef LEADER_ENABLE
+#include "vnoiram_leader.h"
+#endif
+
 #ifdef CONSOLE_ENABLE
 #include "print.h"
 
@@ -19,21 +23,19 @@ void keyboard_post_init_user(void) {
 }
 #endif
 
-void disable_cmode(void){
+void disable_cmode(void) {
   layer_off(_DEFAULT_MICE);
   c_state = WAITING;
 }
 
 int16_t my_abs(int16_t num) {
-    if (num < 0) {
-        num = -num;
-    }
+    if (num < 0) num = -num;
     return num;
 }
 
 #if defined(LAYER_STATE_8BIT)
 // for spcl and rnum
-void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode){
+void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode) {
   if (record->event.pressed) {
     register_code(KC_LGUI);
     tap_code16(regist_keycode);
@@ -108,7 +110,7 @@ void matrix_scan_keymap(void) {
 }
 
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
-  if (has_mouse_report_changed(mouse_report, old_report)) {
+  if (has_mouse_report_changed(&mouse_report, &old_report)) {
     if (c_state == WAITING || (c_state == TYPING && (my_abs(mouse_report.x) + my_abs(mouse_report.y)) > CLICKMODE_PREVENT_MOVEMENT)) {
       c_state = CLICKABLE;
       layer_on(_DEFAULT_MICE);
@@ -176,7 +178,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_SCRL] = LAYOUT_universal(
     KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5    ,                          KC_F6        , KC_F7    , KC_F8    , KC_F9   , KC_F10   ,
-    _______ , _______ , _______ , KC_F11  , SCRL_DVI ,                          KC_LEFT      , KC_DOWN  , KC_UP    , KC_RGHT , KC_LEAD  ,
+    _______ , _______ , _______ , KC_F11  , SCRL_DVI ,                          KC_LEFT      , KC_DOWN  , KC_UP    , KC_RGHT , QK_LEAD  ,
     _______ , _______ , _______ , KC_F12  , SCRL_DVD ,                          CPI_D1K      , CPI_D100 , CPI_I100 , CPI_I1K , KBC_SAVE ,
     _______ , KBC_RST , _______ , _______ , _______  , _______ ,      _______ , LALT(KC_ENT) , _______  , _______  , KBC_RST , _______
   ),
@@ -224,7 +226,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 layer_state_t layer_state_set_user(layer_state_t state) {
   bool f = (get_highest_layer(state) == _SCRL || get_highest_layer(state) == _SFT);
   // Auto enable scroll mode when the highest layer is 4
-  keyball_set_scroll_mode(f, (get_highest_layer(state) == _SFT));
+  keyball_set_scroll_mode( ( f && (get_highest_layer(state) == _SFT) ) );
   if (f) {
     if (c_state != SCROLLING) {
       old_c_state = c_state;
