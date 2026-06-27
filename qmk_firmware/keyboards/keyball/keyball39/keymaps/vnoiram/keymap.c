@@ -29,6 +29,8 @@ void keyboard_post_init_user(void) {
 //     return num;
 // }
 
+static bool scroll_toggle = false;
+
 #if defined(LAYER_STATE_8BIT)
 // for spcl and rnum
 void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode) {
@@ -42,6 +44,12 @@ void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode) {
 
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case SCRL_TO:
+      if (record->event.pressed) {
+        scroll_toggle = !scroll_toggle;
+        keyball_set_scroll_mode(scroll_toggle);
+      }
+      return false;
     case MY_WIN_ALTF4:
       if (record->event.pressed) {
         register_code(KC_LALT); tap_code(KC_F4); unregister_code(KC_LALT);
@@ -279,10 +287,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     keyball_set_scrollsnap_mode(KEYBALL_SCROLLSNAP_MODE_HORIZONTAL);
     keyball_set_scroll_mode(true);
 #endif
-  } else {
-    // if (c_state != SCROLLING) {
-    //   old_c_state = c_state;
-    // }
+  } else if (!scroll_toggle) {
     keyball_set_scroll_mode(false);
   }
 #ifdef CONSOLE_ENABLE
