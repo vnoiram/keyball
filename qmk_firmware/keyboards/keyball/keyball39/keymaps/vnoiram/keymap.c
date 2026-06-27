@@ -148,7 +148,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // LCTL_T(KC_A)   , SCRL_TO      , MS_BTN2    , MS_BTN1          , TO_KEY_TIME     ,                                           SCRL_TO          , MS_BTN1 , MS_BTN2 , TO_KEY_TIME , MS_BTN3          ,
     LCTL_T(KC_A)   , KC_S         , KC_D       , KC_F             , KC_G            ,                                           KC_H             , KC_J    , KC_K    , KC_L   , KC_SCLN          ,
     LSFT_T(KC_Z)   , LGUI_T(KC_X) , LALT_T(KC_C)       , KC_V             , KC_B            ,                                           KC_N             , KC_M    , KC_COMM , KC_DOT , KC_SLSH          ,
-    LCTL_T(KC_ESC) , KC_LGUI      , MY_ALT_TAB , LT(_SPCL,KC_ESC) , LT(_SFT,KC_SPC) , LT(_SCRL,KC_TAB) , LT(_ALTMOVE,KC_BSPC) , LT(_RNUM,KC_ENT) , KC_NO   , KC_NO   , KC_NO  , TO(_DEFAULT_MICE)
+    // LCTL_T(KC_ESC) , KC_LGUI      , MY_ALT_TAB , LT(_SPCL,KC_ESC) , LT(_SFT,KC_SPC) , LT(_SCRL,KC_TAB) , LT(_ALTMOVE,KC_BSPC) , LT(_RNUM,KC_ENT) , KC_NO   , KC_NO   , KC_NO  , TO(_DEFAULT_MICE)
+    LCTL_T(KC_ESC) , KC_LGUI      , MY_ALT_TAB , LT(_SPCL,KC_ESC) , LT(_SFT,KC_SPC) , LT(_SCRL,KC_TAB) , KC_BSPC , LT(_RNUM,KC_ENT) , KC_NO   , KC_NO   , KC_NO  , TO(_DEFAULT_MICE)
   ),
   
   [_DEFAULT_MICE] = LAYOUT_universal(
@@ -186,17 +187,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_SCRL] = LAYOUT_universal(
     KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5    ,                          KC_F6        , KC_F7    , KC_F8    , KC_F9   , KC_F10   ,
-    _______ , _______ , _______ , KC_F11  , SCRL_DVI ,                          KC_LEFT      , KC_DOWN  , KC_UP    , KC_RGHT , SCRL_LEADER_KEY ,
+    _______ , _______ , _______ , KC_F11  , SCRL_DVI ,                          KC_LEFT      , KC_DOWN  , KC_UP    , KC_RGHT , SCRL_LEADER_KEY  ,
     _______ , _______ , _______ , KC_F12  , SCRL_DVD ,                          CPI_D1K      , CPI_D100 , CPI_I100 , CPI_I1K , KBC_SAVE ,
     _______ , KBC_RST , _______ , _______ , _______  , _______ ,      _______ , LALT(KC_ENT) , _______  , _______  , KBC_RST , _______
   ),
 
-  [_ALTMOVE] = LAYOUT_universal(
-    KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   ,                          KC_F6         , KC_F7         , KC_F8       , KC_F9         , KC_F10  ,
-    KC_LCTL , _______ , _______ , KC_F11  , KC_QUOT ,                          LALT(KC_LEFT) , LALT(KC_DOWN) , LALT(KC_UP) , LALT(KC_RGHT) , KC_QUOT ,
-    _______ , _______ , _______ , KC_F12  , KC_MINS ,                          KC_GRV        , KC_EQL        , KC_LBRC     , KC_RBRC       , KC_BSLS ,
-    _______ , _______ , _______ , _______ , _______ , _______ ,      _______ , _______       , _______       , _______     , _______       , _______
-  ),
+  // [_ALTMOVE] = LAYOUT_universal(
+  //     [[]][[]]]}[]
+  //   KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   ,                          KC_F6         , KC_F7         , KC_F8       , KC_F9         , KC_F10  ,
+  //   KC_LCTL , _______ , _______ , KC_F11  , KC_QUOT ,                          LALT(KC_LEFT) , LALT(KC_DOWN) , LALT(KC_UP) , LALT(KC_RGHT) , KC_QUOT ,
+  //   _______ , _______ , _______ , KC_F12  , KC_MINS ,                          KC_GRV        , KC_EQL        , KC_LBRC     , KC_RBRC       , KC_BSLS ,
+  //   _______ , _______ , _______ , _______ , _______ , _______ ,      _______ , _______       , _______       , _______     , _______       , _______
+  // ),
 
   [_RNUM] = LAYOUT_universal(
     S(KC_1) , S(KC_2) , S(KC_3) , S(KC_4) , S(KC_5) ,                          S(KC_6) , S(KC_7) , S(KC_8) , S(KC_9) , S(KC_0) ,
