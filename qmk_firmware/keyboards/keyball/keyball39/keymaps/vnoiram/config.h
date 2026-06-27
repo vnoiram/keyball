@@ -57,10 +57,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define CLICKMODE_PREVENT_MOVEMENT 125
 #define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT // 暫定の対処、ハンダが取れたのか、右がHIGH、左がLOWになっている
 
-// keyball restrcit layer to 8 bit
+// keyball already restrcit layer to 8 bit
 // expand 8bit -> 16 bit
 // #    undef LAYER_STATE_8BIT
 // #    define LAYER_STATE_16BIT
+#    define LAYER_STATE_8BIT
 
 // #undef POINTING_DEVICE_AUTO_MOUSE_ENABLE
 #ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
