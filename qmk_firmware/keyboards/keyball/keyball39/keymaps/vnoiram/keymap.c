@@ -42,6 +42,9 @@ void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode) {
 }
 #endif
 
+// tap_code16 + 100ms 遅延ヘルパー (send_string 除去後の文字入力用)
+static void tap_c(uint16_t kc) { tap_code16(kc); wait_ms(100); }
+
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case SCRL_TO:
@@ -64,18 +67,39 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
       return false;
     case MY_WIN_RECYCLE:
       if (record->event.pressed) {
-        register_code(KC_LGUI); tap_code(KC_R); unregister_code(KC_LGUI);
+        // Win+R: ダイアログが確実に開くよう段階的に遅延
+        register_code(KC_LGUI);
+        wait_ms(100);
+        tap_code(KC_R);
+        wait_ms(80);
+        unregister_code(KC_LGUI);
         wait_ms(2000);
-        send_string("shell:recycleBinFolder");
-        tap_code(KC_ENT);
+        // send_string("shell:recycleBinFolder");
+        // ↑ QMK の send_string(298B) + ascii_to_keycode_lut(128B) を除去するため tap_c に展開
+        tap_c(KC_S); tap_c(KC_H); tap_c(KC_E); tap_c(KC_L); tap_c(KC_L);
+        tap_c(KC_COLN);
+        tap_c(KC_R); tap_c(KC_E); tap_c(KC_C); tap_c(KC_Y); tap_c(KC_C);
+        tap_c(KC_L); tap_c(KC_E);
+        tap_c(S(KC_B));
+        tap_c(KC_I); tap_c(KC_N);
+        tap_c(S(KC_F));
+        tap_c(KC_O); tap_c(KC_L); tap_c(KC_D); tap_c(KC_E); tap_c(KC_R);
+        tap_c(KC_ENT);
       }
       return false;
     case MY_WIN_NOTE:
       if (record->event.pressed) {
-        register_code(KC_LGUI); tap_code(KC_R); unregister_code(KC_LGUI);
+        register_code(KC_LGUI);
+        wait_ms(100);
+        tap_code(KC_R);
+        wait_ms(80);
+        unregister_code(KC_LGUI);
         wait_ms(2000);
-        send_string("notepad");
-        tap_code(KC_ENT);
+        // send_string("notepad");
+        // ↑ 同上: send_string 除去のため tap_c に展開
+        tap_c(KC_N); tap_c(KC_O); tap_c(KC_T); tap_c(KC_E);
+        tap_c(KC_P); tap_c(KC_A); tap_c(KC_D);
+        tap_c(KC_ENT);
       }
       return false;
   }
