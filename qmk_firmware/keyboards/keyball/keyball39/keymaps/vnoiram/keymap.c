@@ -23,15 +23,15 @@ void keyboard_post_init_user(void) {
 }
 #endif
 
-void disable_cmode(void) {
-  layer_off(_DEFAULT_MICE);
-  c_state = WAITING;
-}
+// void disable_cmode(void) {
+//   layer_off(_DEFAULT_MICE);
+//   c_state = WAITING;
+// }
 
-int16_t my_abs(int16_t num) {
-    if (num < 0) num = -num;
-    return num;
-}
+// int16_t my_abs(int16_t num) {
+//     if (num < 0) num = -num;
+//     return num;
+// }
 
 #if defined(LAYER_STATE_8BIT)
 // for spcl and rnum
@@ -64,72 +64,72 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
   }
 #endif
 
-  switch (keycode) {
-    case SCRL_TO:
-#ifdef CONSOLE_ENABLE
-      print("scrl-to\n");
-#endif
-      click_timer = timer_read();
-      if (record->event.pressed) {
-        if (!keyball_get_scroll_mode()) {
-          c_state = SCROLLING;
-        } else {
-          c_state = CLICKABLE;
-        }
-      }
-      break;
-    case KC_MS_BTN1 ... KC_MS_BTN8:
-#ifdef CONSOLE_ENABLE
-      print("btn\n");
-#endif
-      click_timer = timer_read();
-      c_state = CLICKABLE;
-      break;
-    case KC_LCTL:
-    case KC_LSFT:
-    case KC_LALT:
-    case KC_LGUI:
-      if (c_state == CLICKABLE) {
-        break;
-      }
-    default:
-      type_timer = timer_read();
-#ifdef CONSOLE_ENABLE
-      print("mise: default\n");
-#endif
-      if (c_state != WAITING && c_state != TYPING) {
-        disable_cmode();
-      }
-      c_state = TYPING;
-      break;
-  }
+//   switch (keycode) {
+//     case SCRL_TO:
+// #ifdef CONSOLE_ENABLE
+//       print("scrl-to\n");
+// #endif
+//       click_timer = timer_read();
+//       if (record->event.pressed) {
+//         if (!keyball_get_scroll_mode()) {
+//           c_state = SCROLLING;
+//         } else {
+//           c_state = CLICKABLE;
+//         }
+//       }
+//       break;
+//     case KC_MS_BTN1 ... KC_MS_BTN8:
+// #ifdef CONSOLE_ENABLE
+//       print("btn\n");
+// #endif
+//       // click_timer = timer_read();
+//       // c_state = CLICKABLE;
+//       break;
+//     case KC_LCTL:
+//     case KC_LSFT:
+//     case KC_LALT:
+//     case KC_LGUI:
+//       // if (c_state == CLICKABLE) {
+//       //   break;
+//       // }
+//     default:
+//       // type_timer = timer_read();
+// #ifdef CONSOLE_ENABLE
+//       print("mise: default\n");
+// #endif
+//       // if (c_state != WAITING && c_state != TYPING) {
+//       //   // disable_cmode();
+//       // }
+//       // c_state = TYPING;
+//       break;
+//   }
   return true;
 }
 
 void matrix_scan_keymap(void) {
 }
 
-report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
-  if (has_mouse_report_changed(&mouse_report, &old_report)) {
-    if (c_state == WAITING || (c_state == TYPING && (my_abs(mouse_report.x) + my_abs(mouse_report.y)) > CLICKMODE_PREVENT_MOVEMENT)) {
-      c_state = CLICKABLE;
-      layer_on(_DEFAULT_MICE);
-    }
-    click_timer = timer_read();
-  } else {
-    if (c_state == TYPING){
-      if (timer_elapsed(type_timer) > 550) {
-        c_state = WAITING;
-      }
-    } else if (c_state == CLICKABLE) {
-      if (timer_elapsed(click_timer) > 300) {
-       disable_cmode();
-      }
-    }
-  }
-  old_report = mouse_report;
-  return mouse_report;
-}
+// report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+//   if (has_mouse_report_changed(&mouse_report, &old_report)) {
+//     if (c_state == WAITING || (c_state == TYPING && (my_abs(mouse_report.x) + my_abs(mouse_report.y)) > CLICKMODE_PREVENT_MOVEMENT)) {
+//       c_state = CLICKABLE;
+//       // layer_on(_DEFAULT_MICE);
+//     }
+//     click_timer = timer_read();
+//   } else {
+//     if (c_state == TYPING){
+//       if (timer_elapsed(type_timer) > 550) {
+//         c_state = WAITING;
+//       }
+//     } else if (c_state == CLICKABLE) {
+//       if (timer_elapsed(click_timer) > 300) {
+//        // disable_cmode();
+//       }
+//     }
+//   }
+//   old_report = mouse_report;
+//   return mouse_report;
+// }
 
 // layer declarations
 // clang-format off
@@ -224,18 +224,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 // keyball scroll layer
 layer_state_t layer_state_set_user(layer_state_t state) {
-  bool f = (get_highest_layer(state) == _SCRL || get_highest_layer(state) == _SFT);
+  // bool f = (get_highest_layer(state) == _SCRL || get_highest_layer(state) == _SPCL);
+  // bool f = (get_highest_layer(state) == _SCRL);
   // Auto enable scroll mode when the highest layer is 4
-  keyball_set_scroll_mode( ( f && (get_highest_layer(state) == _SFT) ) );
-  if (f) {
-    if (c_state != SCROLLING) {
-      old_c_state = c_state;
-    }
-    c_state = SCROLLING;
+  // keyball_set_scroll_mode( ( f && (get_highest_layer(state) == _SCRL) ) );
+  // switch (get_highest_layer(state)) {
+  //   case _SCRL:
+  //     keyball_set_scrollsnap_mode(KEYBALL_SCROLLSNAP_MODE_FREE);
+  //     break;
+  //   // case _SPCL:
+  //   //   keyball_set_scrollsnap_mode(KEYBALL_SCROLLSNAP_MODE_HORIZONTAL);
+  //   //   break;
+  // }
+  if (get_highest_layer(state) == _SCRL) {
+    // if (c_state != SCROLLING) {
+    //   old_c_state = c_state;
+    // }
+    // c_state = SCROLLING;
+#ifdef KEYBALL_SCROLLSNAP_ENABLE
+    keyball_set_scrollsnap_mode(KEYBALL_SCROLLSNAP_MODE_FREE);
+#endif
+    keyball_set_scroll_mode(true);
   } else {
-    if (c_state != SCROLLING) {
-      old_c_state = c_state;
-    }
+    // if (c_state != SCROLLING) {
+    //   old_c_state = c_state;
+    // }
+    keyball_set_scroll_mode(false);
   }
 #ifdef CONSOLE_ENABLE
   // print("in layer state: ");
@@ -271,9 +285,33 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 	// 		print("Undefined");
   // }
 #endif 
+
+#ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+  switch(get_highest_layer(remove_auto_mouse_layer(state, true))) {
+    case _SPCL:
+    case _SPCL_AND_RNUM:
+      // remove_auto_mouse_target must be called to adjust state *before* setting enable
+      state = remove_auto_mouse_layer(state, false);
+      set_auto_mouse_enable(false);
+      break;
+    default:
+      set_auto_mouse_enable(true);
+      break;
+  }
+  // recommend that any code that makes adjustment based on auto mouse layer state would go here
+  return state;
+#endif
+
 #if !defined(LAYER_STATE_8BIT) || defined(LAYER_STATE_16BIT) || defined(LAYER_STATE_32BIT)
   state = update_tri_layer_state(state, _SPCL, _RNUM, _SPCL_AND_RNUM);
 #endif 
   // state = update_tri_layer_state(state, _RAISE, _SYMB, _SPECIAL);
   return state;
 }
+
+#ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+void pointing_device_init_user(void) {
+    set_auto_mouse_layer(_DEFAULT_MICE); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
+    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+}
+#endif

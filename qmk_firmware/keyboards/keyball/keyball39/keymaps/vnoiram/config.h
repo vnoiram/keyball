@@ -34,9 +34,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #ifdef AUTO_SHIFT_ENABLE
-#    define AUTO_SHIFT_TIMEOUT 105
+#    define AUTO_SHIFT_TIMEOUT 90
 #    define NO_AUTO_SHIFT_ALPHA
 #    define NO_AUTO_SHIFT_NUMERIC
+#    define AUTO_SHIFT_TIMEOUT_PER_KEY
 #endif
 
 #ifdef TAP_DANCE_ENABLE
@@ -53,12 +54,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #if defined(ALT_TAB_BY_LAYER_ENABLE) || defined(ALT_TAB_ENABLE)
-#  define ALT_TAB_TIMEOUT 85
+#    define ALT_TAB_TIMEOUT 85
 #endif
 
-# define CLICKMODE_PREVENT_MOVEMENT 125
+// #define CLICKMODE_PREVENT_MOVEMENT 125
+#define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT // 暫定の対処、ハンダが取れたのか、右がHIGH、左がLOWになっている
 
-// keyball retrcit layer to 8 bit
+// keyball restrcit layer to 8 bit
 // expand 8bit -> 16 bit
 // #    undef LAYER_STATE_8BIT
 // #    define LAYER_STATE_16BIT
+
+// #undef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+#ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+#    define AUTO_MOUSE_TIME 300
+#    define AUTO_MOUSE_DELAY TAPPING_TERM
+#    define AUTO_MOUSE_DEBOUNCE 25
+#    define AUTO_MOUSE_THRESHOLD 0
+#endif
