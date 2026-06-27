@@ -40,12 +40,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #    define AUTO_SHIFT_TIMEOUT_PER_KEY
 #endif
 
-#ifdef TAP_DANCE_ENABLE
-#    define TAPPING_TERM 100
-#    define TAPPING_TERM_PER_KEY
-// #    define RETRO_TAPPING_PER_KEY
-// #    define IGNORE_MOD_TAP_INTERRUPT
-#endif
+#define TAPPING_TERM 200
+#define TAPPING_TERM_PER_KEY
+#define RETRO_TAPPING_PER_KEY
 
 #ifdef LEADER_ENABLE
 #    define LEADER_TIMEOUT 400
