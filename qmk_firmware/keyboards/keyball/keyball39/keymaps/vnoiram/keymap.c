@@ -137,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for development
   [_DEFAULT_KEY] = LAYOUT_universal(
     KC_Q           , KC_W         , KC_E       , KC_R             , KC_T            ,                                           KC_Y             , KC_U    , KC_I    , KC_O   , KC_P             ,
-    // LCTL_T(KC_A)   , SCRL_TO      , KC_BTN2    , KC_BTN1          , TO_KEY_TIME     ,                                           SCRL_TO          , KC_BTN1 , KC_BTN2 , TO_KEY_TIME , KC_BTN3          ,
+    // LCTL_T(KC_A)   , SCRL_TO      , MS_BTN2    , MS_BTN1          , TO_KEY_TIME     ,                                           SCRL_TO          , MS_BTN1 , MS_BTN2 , TO_KEY_TIME , MS_BTN3          ,
     LCTL_T(KC_A)   , KC_S         , KC_D       , KC_F             , KC_G            ,                                           KC_H             , KC_J    , KC_K    , KC_L   , KC_SCLN          ,
     LSFT_T(KC_Z)   , LGUI_T(KC_X) , LALT_T(KC_C)       , KC_V             , KC_B            ,                                           KC_N             , KC_M    , KC_COMM , KC_DOT , KC_SLSH          ,
     LCTL_T(KC_ESC) , KC_LGUI      , MY_ALT_TAB , LT(_SPCL,KC_ESC) , LT(_SFT,KC_SPC) , LT(_SCRL,KC_TAB) , LT(_ALTMOVE,KC_BSPC) , LT(_RNUM,KC_ENT) , KC_NO   , KC_NO   , KC_NO  , TO(_DEFAULT_MICE)
@@ -146,8 +146,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DEFAULT_MICE] = LAYOUT_universal(
     _______ , _______ , _______ , _______ , _______ ,                          _______ , _______ , _______ , _______ , _______           ,
     // _______ , KC_S    , KC_D    , KC_F    , KC_G    ,                          KC_H    , KC_J    , KC_K    , KC_L    , KC_SCLN           ,
-    // _______ , SCRL_TO , KC_BTN2 , KC_BTN1 , _______ ,                          SCRL_TO , KC_BTN1 , KC_BTN2 , _______ , KC_BTN3           ,
-    _______ , SCRL_TO , KC_BTN2 , KC_BTN1 , KC_BTN3 ,                          SCRL_TO , KC_BTN1 , KC_BTN2 , _______ , _______           ,
+    // _______ , SCRL_TO , MS_BTN2 , MS_BTN1 , _______ ,                          SCRL_TO , MS_BTN1 , MS_BTN2 , _______ , MS_BTN3           ,
+    _______ , SCRL_TO , MS_BTN2 , MS_BTN1 , MS_BTN3 ,                          SCRL_TO , MS_BTN1 , MS_BTN2 , _______ , _______           ,
     _______ , _______ , _______ , _______ , _______ ,                          _______ , _______ , _______ , _______ , _______           ,
     _______ , _______ , _______ , _______ , _______ , _______ ,      _______ , _______ , _______ , _______ , _______ , TO(_DEFAULT_KEY)
   ),
@@ -157,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Q           , KC_E    , KC_W       , KC_R             , KC_T   ,                                KC_Y             , KC_U  , KC_I    , KC_O   , KC_P              ,
     KC_LSFT        , KC_A    , KC_S       , KC_D             , KC_G   ,                                KC_H             , KC_J  , KC_K    , KC_L   , KC_SCLN           ,
     KC_LCTL        , KC_Z    , KC_X       , KC_V             , KC_B   ,                                KC_N             , KC_M  , KC_COMM , KC_DOT , KC_SLSH           ,
-    KC_C , KC_LGUI , KC_ESC , KC_BTN3 , KC_SPC , LT(_RNUM, KC_F) , LT(_ALTMOVE,KC_BSPC) , LT(_RNUM,KC_ENT) , KC_NO , KC_NO   , KC_NO  , TO(_DEFAULT_MICE)
+    KC_C , KC_LGUI , KC_ESC , MS_BTN3 , KC_SPC , LT(_RNUM, KC_F) , LT(_ALTMOVE,KC_BSPC) , LT(_RNUM,KC_ENT) , KC_NO , KC_NO   , KC_NO  , TO(_DEFAULT_MICE)
   ),
 #endif
 
@@ -170,8 +170,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_SPCL] = LAYOUT_universal(
     KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   ,                          KC_F6   , KC_F7   , KC_F8   , KC_F9   , KC_F10     ,
-    // _______ , KC_MPLY , KC_VOLU , KC_MINS , KC_QUOT ,                          KC_PGUP , KC_BTN1 , KC_BTN2 , KC_BTN3 , KC_EQL     ,
-    _______ , SCRL_TO , KC_BTN2 , KC_BTN1 , KC_BTN3 ,                          KC_PGUP , KC_MINS , KC_QUOT , KC_GRV  , KC_EQL     ,
+    // _______ , KC_MPLY , KC_VOLU , KC_MINS , KC_QUOT ,                          KC_PGUP , MS_BTN1 , MS_BTN2 , MS_BTN3 , KC_EQL     ,
+    _______ , SCRL_TO , MS_BTN2 , MS_BTN1 , MS_BTN3 ,                          KC_PGUP , KC_MINS , KC_QUOT , KC_GRV  , KC_EQL     ,
     _______ , KC_MPLY , KC_MUTE , KC_VOLD , KC_VOLU ,                          KC_PGDN , KC_HOME , KC_END  , _______ , _______    ,
     _______ , _______ , _______ , _______ , _______ , _______ ,      _______ , _______ , _______ , _______ , _______ , JTU_TOGGLE
   ),
@@ -245,6 +245,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     keyball_set_scrollsnap_mode(KEYBALL_SCROLLSNAP_MODE_FREE);
 #endif
     keyball_set_scroll_mode(true);
+#ifdef KEYBALL_SCROLLSNAP_ENABLE
+  } else if (get_highest_layer(state) == _SFT) {
+    keyball_set_scrollsnap_mode(KEYBALL_SCROLLSNAP_MODE_HORIZONTAL);
+    keyball_set_scroll_mode(true);
+#endif
   } else {
     // if (c_state != SCROLLING) {
     //   old_c_state = c_state;
