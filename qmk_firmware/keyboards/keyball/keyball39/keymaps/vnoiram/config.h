@@ -57,6 +57,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define CLICKMODE_PREVENT_MOVEMENT 125
 #define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT // 暫定の対処、ハンダが取れたのか、右がHIGH、左がLOWになっている
 
+// USB 接続側を明示（OLED 表示の compile-time 分岐に使用）
+// SPLIT_HAND_MATRIX_GRID と共存可能: split 検出には影響しない
+#define MASTER_RIGHT  // USB 右接続
+// #define MASTER_LEFT
+
 // keyball already restrcit layer to 8 bit
 // expand 8bit -> 16 bit
 // #    undef LAYER_STATE_8BIT
