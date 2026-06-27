@@ -40,6 +40,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #    define AUTO_SHIFT_TIMEOUT_PER_KEY
 #endif
 
+#ifdef MINE_AUTO_SHIFT_ENABLE
+#    define MINE_AUTO_SHIFT_TIMEOUT 90
+#endif
+
 #define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
 #define RETRO_TAPPING_PER_KEY
