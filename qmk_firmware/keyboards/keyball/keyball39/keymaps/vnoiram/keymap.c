@@ -7,18 +7,6 @@
 #include "vnoiram.h"
 #include "keymap.h"
 
-#ifdef LEADER_ENABLE
-#include "vnoiram_leader.h"
-#endif
-
-#if defined(LEADER_ENABLE)
-#  define SCRL_LEADER_KEY QK_LEAD
-#elif defined(MINE_LEADER_ENABLE)
-#  define SCRL_LEADER_KEY MY_LEADER
-#else
-#  define SCRL_LEADER_KEY XXXXXXX
-#endif
-
 #ifdef CONSOLE_ENABLE
 #include "print.h"
 
@@ -53,6 +41,37 @@ void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode) {
 #endif
 
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case MY_WIN_ALTF4:
+      if (record->event.pressed) {
+        register_code(KC_LALT); tap_code(KC_F4); unregister_code(KC_LALT);
+      }
+      return false;
+    case MY_WIN_FQUIT:
+      if (record->event.pressed) {
+        register_code(KC_LALT); tap_code(KC_F4); unregister_code(KC_LALT);
+        wait_ms(200);
+        tap_code(KC_N);
+      }
+      return false;
+    case MY_WIN_RECYCLE:
+      if (record->event.pressed) {
+        register_code(KC_LGUI); tap_code(KC_R); unregister_code(KC_LGUI);
+        wait_ms(2000);
+        send_string("shell:recycleBinFolder");
+        tap_code(KC_ENT);
+      }
+      return false;
+    case MY_WIN_NOTE:
+      if (record->event.pressed) {
+        register_code(KC_LGUI); tap_code(KC_R); unregister_code(KC_LGUI);
+        wait_ms(2000);
+        send_string("notepad");
+        tap_code(KC_ENT);
+      }
+      return false;
+  }
+
 #if defined(LAYER_STATE_8BIT)
   if (layer_state_is(_SPCL) && layer_state_is(_RNUM)) {
     switch (keycode) {
@@ -187,7 +206,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_SCRL] = LAYOUT_universal(
     KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5    ,                          KC_F6        , KC_F7    , KC_F8    , KC_F9   , KC_F10   ,
-    _______ , _______ , _______ , KC_F11  , SCRL_DVI ,                          KC_LEFT      , KC_DOWN  , KC_UP    , KC_RGHT , SCRL_LEADER_KEY  ,
+    MY_WIN_FQUIT , MY_WIN_RECYCLE , MY_WIN_NOTE , KC_F11  , SCRL_DVI ,           KC_LEFT      , KC_DOWN  , KC_UP    , KC_RGHT , MY_WIN_ALTF4     ,
     _______ , _______ , _______ , KC_F12  , SCRL_DVD ,                          CPI_D1K      , CPI_D100 , CPI_I100 , CPI_I1K , KBC_SAVE ,
     _______ , KBC_RST , _______ , _______ , _______  , _______ ,      _______ , LALT(KC_ENT) , _______  , _______  , KBC_RST , _______
   ),
