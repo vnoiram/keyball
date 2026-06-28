@@ -121,38 +121,6 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 #if defined(LAYER_STATE_8BIT)
   if (layer_state_is(_SPCL) && layer_state_is(_RNUM)) {
     switch (keycode) {
-      case KC_H:
-        register_code(KC_LALT);
-        wait_ms(100);
-        tap_c(KC_LEFT);
-        wait_ms(80);
-        unregister_code(KC_LALT);
-        return false;
-      case KC_J:
-        register_code(KC_LALT);
-        wait_ms(100);
-        tap_c(KC_DOWN);
-        wait_ms(80);
-        unregister_code(KC_LALT);
-        return false;
-      case KC_K:
-        register_code(KC_LALT);
-        wait_ms(100);
-        tap_c(KC_UP);
-        wait_ms(80);
-        unregister_code(KC_LALT);
-        return false;
-      case KC_L:
-        register_code(KC_LALT);
-        wait_ms(100);
-        tap_c(KC_RGHT);
-        wait_ms(80);
-        unregister_code(KC_LALT);
-        return false;
-    }
-  }
-  if (layer_state_is(_SPCL) && layer_state_is(_RNUM)) {
-    switch (keycode) {
       case KC_6:
         register_code(KC_LGUI);
         tap_c(KC_LEFT);
@@ -415,7 +383,12 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     uint8_t highest = get_highest_layer(layer_state);
     bool allow = (highest != _SPCL && highest != _SPCL_AND_RNUM);
 
-    if ((mouse_report.x != 0 || mouse_report.y != 0 || mouse_report.h != 0 || mouse_report.v != 0 || mouse_report.buttons != 0) && allow) {
+    bool has_movement = (
+        mouse_report.x > MINE_AUTO_MOUSE_THRESHOLD || mouse_report.x < -MINE_AUTO_MOUSE_THRESHOLD ||
+        mouse_report.y > MINE_AUTO_MOUSE_THRESHOLD || mouse_report.y < -MINE_AUTO_MOUSE_THRESHOLD ||
+        mouse_report.h != 0 || mouse_report.v != 0 || mouse_report.buttons != 0
+    );
+    if (has_movement && allow) {
         layer_on(_DEFAULT_MICE);
         auto_mouse_timer = timer_read();
     } else if (layer_state_is(_DEFAULT_MICE)) {
