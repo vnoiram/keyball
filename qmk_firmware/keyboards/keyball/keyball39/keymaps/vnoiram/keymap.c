@@ -349,22 +349,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   // }
 #endif 
 
-#ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
-  switch(get_highest_layer(remove_auto_mouse_layer(state, true))) {
-    case _SPCL:
-    case _SPCL_AND_RNUM:
-      // remove_auto_mouse_target must be called to adjust state *before* setting enable
-      state = remove_auto_mouse_layer(state, false);
-      set_auto_mouse_enable(false);
-      break;
-    default:
-      set_auto_mouse_enable(true);
-      break;
-  }
-  // recommend that any code that makes adjustment based on auto mouse layer state would go here
-  return state;
-#endif
-
 #if !defined(LAYER_STATE_8BIT) || defined(LAYER_STATE_16BIT) || defined(LAYER_STATE_32BIT)
   state = update_tri_layer_state(state, _SPCL, _RNUM, _SPCL_AND_RNUM);
 #endif 
@@ -372,9 +356,18 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   return state;
 }
 
-#ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
-void pointing_device_init_user(void) {
-    set_auto_mouse_layer(_DEFAULT_MICE); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
-    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    static uint16_t auto_mouse_timer = 0;
+    uint8_t highest = get_highest_layer(layer_state);
+    bool allow = (highest != _SPCL && highest != _SPCL_AND_RNUM);
+
+    if ((mouse_report.x != 0 || mouse_report.y != 0) && allow) {
+        layer_on(_DEFAULT_MICE);
+        auto_mouse_timer = timer_read();
+    } else if (layer_state_is(_DEFAULT_MICE)) {
+        if (!allow || timer_elapsed(auto_mouse_timer) > MINE_AUTO_MOUSE_TIME) {
+            layer_off(_DEFAULT_MICE);
+        }
+    }
+    return mouse_report;
 }
-#endif
