@@ -40,16 +40,16 @@ void housekeeping_task_user(void) {
 
 static bool scroll_toggle = false;
 
-#if defined(LAYER_STATE_8BIT)
-// for spcl and rnum
-void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode) {
-  if (record->event.pressed) {
-    register_code(KC_LGUI);
-    tap_code16(regist_keycode);
-    unregister_code(KC_LGUI);
-  }
-}
-#endif
+// #if defined(LAYER_STATE_8BIT)
+// // for spcl and rnum
+// void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode) {
+//   if (record->event.pressed) {
+//     register_code(KC_LGUI);
+//     tap_code16(regist_keycode);
+//     unregister_code(KC_LGUI);
+//   }
+// }
+// #endif
 
 // tap_code16 + 100ms 遅延ヘルパー (send_string 除去後の文字入力用)
 static void tap_c(uint16_t kc) { tap_code16(kc); wait_ms(100); }
@@ -121,17 +121,57 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 #if defined(LAYER_STATE_8BIT)
   if (layer_state_is(_SPCL) && layer_state_is(_RNUM)) {
     switch (keycode) {
+      case KC_H:
+        register_code(KC_LALT);
+        wait_ms(100);
+        tap_c(KC_LEFT);
+        wait_ms(80);
+        unregister_code(KC_LALT);
+        return false;
+      case KC_J:
+        register_code(KC_LALT);
+        wait_ms(100);
+        tap_c(KC_DOWN);
+        wait_ms(80);
+        unregister_code(KC_LALT);
+        return false;
+      case KC_K:
+        register_code(KC_LALT);
+        wait_ms(100);
+        tap_c(KC_UP);
+        wait_ms(80);
+        unregister_code(KC_LALT);
+        return false;
+      case KC_L:
+        register_code(KC_LALT);
+        wait_ms(100);
+        tap_c(KC_RGHT);
+        wait_ms(80);
+        unregister_code(KC_LALT);
+        return false;
+    }
+  }
+  if (layer_state_is(_SPCL) && layer_state_is(_RNUM)) {
+    switch (keycode) {
       case KC_6:
-        proc_spcl_rnum(record, KC_LEFT);
+        register_code(KC_LGUI);
+        tap_c(KC_LEFT);
+        unregister_code(KC_LGUI);
         return false;
       case KC_7:
-        proc_spcl_rnum(record, KC_DOWN);
+        register_code(KC_LGUI);
+        tap_c(KC_DOWN);
+        unregister_code(KC_LGUI);
         return false;
       case KC_8:
-        proc_spcl_rnum(record, KC_UP);
+        register_code(KC_LGUI);
+        tap_c(KC_UP);
+        unregister_code(KC_LGUI);
         return false;
       case KC_9:
-        proc_spcl_rnum(record, KC_RGHT);
+        register_code(KC_LGUI);
+        tap_c(KC_RGHT);
+        unregister_code(KC_LGUI);
         return false;
     }
   }
@@ -252,8 +292,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_SCRL] = LAYOUT_universal(
     KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5    ,                          KC_F6        , KC_F7    , KC_F8    , KC_F9   , KC_F10   ,
-    MY_WIN_FQUIT , MY_WIN_RECYCLE , MY_WIN_NOTE , KC_F11  , SCRL_DVI ,           KC_LEFT      , KC_DOWN  , KC_UP    , KC_RGHT , MY_WIN_ALTF4     ,
-    _______ , _______ , _______ , KC_F12  , SCRL_DVD ,                          CPI_D1K      , CPI_D100 , CPI_I100 , CPI_I1K , KBC_SAVE ,
+    _______ , MY_WIN_RECYCLE , MY_WIN_NOTE , KC_F11  , SCRL_DVI ,           KC_LEFT      , KC_DOWN  , KC_UP    , KC_RGHT , MY_WIN_ALTF4     ,
+    _______ , MY_WIN_FQUIT , _______ , KC_F12  , SCRL_DVD ,                          CPI_D1K      , CPI_D100 , CPI_I100 , CPI_I1K , KBC_SAVE ,
     _______ , KBC_RST , _______ , _______ , _______  , _______ ,      _______ , LALT(KC_ENT) , _______  , _______  , KBC_RST , _______
   ),
 
@@ -375,7 +415,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     uint8_t highest = get_highest_layer(layer_state);
     bool allow = (highest != _SPCL && highest != _SPCL_AND_RNUM);
 
-    if ((mouse_report.x != 0 || mouse_report.y != 0 || mouse_report.buttons != 0) && allow) {
+    if ((mouse_report.x != 0 || mouse_report.y != 0 || mouse_report.h != 0 || mouse_report.v != 0 || mouse_report.buttons != 0) && allow) {
         layer_on(_DEFAULT_MICE);
         auto_mouse_timer = timer_read();
     } else if (layer_state_is(_DEFAULT_MICE)) {
