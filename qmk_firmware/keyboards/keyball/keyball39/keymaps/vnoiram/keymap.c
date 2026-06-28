@@ -46,6 +46,11 @@ void proc_spcl_rnum(keyrecord_t *record, uint16_t regist_keycode) {
 static void tap_c(uint16_t kc) { tap_code16(kc); wait_ms(100); }
 
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed && layer_state_is(_DEFAULT_MICE)) {
+    if (!IS_MOUSE_KEYCODE(keycode) && keycode != SCRL_TO) {
+      layer_off(_DEFAULT_MICE);
+    }
+  }
   switch (keycode) {
     case SCRL_TO:
       if (record->event.pressed) {
@@ -361,7 +366,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     uint8_t highest = get_highest_layer(layer_state);
     bool allow = (highest != _SPCL && highest != _SPCL_AND_RNUM);
 
-    if ((mouse_report.x != 0 || mouse_report.y != 0) && allow) {
+    if ((mouse_report.x != 0 || mouse_report.y != 0 || mouse_report.buttons != 0) && allow) {
         layer_on(_DEFAULT_MICE);
         auto_mouse_timer = timer_read();
     } else if (layer_state_is(_DEFAULT_MICE)) {
