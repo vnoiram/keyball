@@ -1,4 +1,9 @@
-OLED_ENABLE = yes
+MINE_OLED_ENABLE = yes
+ifeq ($(strip $(MINE_OLED_ENABLE)), yes)
+    OLED_ENABLE = no
+    I2C_DRIVER_REQUIRED = yes
+    SRC += keyboards/keyball/keyball39/keymaps/vnoiram/vnoiram_font.c
+endif
 #AUTO_SHIFT_ENABLE = yes
 MINE_AUTO_SHIFT_ENABLE = yes
 #TAP_DANCE_ENABLE = yes

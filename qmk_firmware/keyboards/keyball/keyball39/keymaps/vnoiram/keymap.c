@@ -1,21 +1,30 @@
 #include QMK_KEYBOARD_H
 #include "quantum.h"
-#ifdef OLED_ENABLE
 #include "vnoiram_oled.h"
-#endif
 
 #include "vnoiram.h"
 #include "keymap.h"
 
 #ifdef CONSOLE_ENABLE
 #include "print.h"
+#endif
 
 void keyboard_post_init_user(void) {
-  // Customise these values to desired behaviour
-  debug_enable=true;
-  // debug_matrix=true;:
-  // debug_keyboard=true;
-  // debug_mouse=true;
+#ifdef CONSOLE_ENABLE
+    debug_enable = true;
+#endif
+#ifdef MINE_OLED_ENABLE
+    mine_oled_init();
+#endif
+}
+
+#ifdef MINE_OLED_ENABLE
+void housekeeping_task_user(void) {
+    static uint16_t oled_timer = 0;
+    if (timer_elapsed(oled_timer) > 50) {
+        mine_oled_render();
+        oled_timer = timer_read();
+    }
 }
 #endif
 

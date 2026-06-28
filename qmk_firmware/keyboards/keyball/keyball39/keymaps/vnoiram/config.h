@@ -81,10 +81,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #    define AUTO_MOUSE_THRESHOLD 0
 #endif
 
-// Custom minimal OLED font (digits + A-Z only, reduce bytes 984 bytes to 258)
-#undef  OLED_FONT_H
-#define OLED_FONT_H "keyboards/keyball/keyball39/keymaps/vnoiram/vnoiram_font.c"
-#undef  OLED_FONT_START
-#define OLED_FONT_START 0x30
-#undef  OLED_FONT_END
-#define OLED_FONT_END   0x5A

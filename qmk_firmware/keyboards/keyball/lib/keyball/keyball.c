@@ -34,8 +34,10 @@ const uint16_t AML_TIMEOUT_MAX = 1000;
 const uint16_t AML_TIMEOUT_QU  = 50;   // Quantization Unit
 
 static const char BL = '\xB0'; // Blank indicator character
+#ifdef OLED_ENABLE
 static const char LFSTR_ON[] PROGMEM = "\xB2\xB3";
 static const char LFSTR_OFF[] PROGMEM = "\xB4\xB5";
+#endif
 
 keyball_t keyball = {
     .this_have_ball = false,
@@ -379,7 +381,6 @@ static void rpc_set_cpi_invoke(void) {
 //////////////////////////////////////////////////////////////////////////////
 // OLED utility
 
-#ifdef OLED_ENABLE
 // clang-format off
 const char PROGMEM code_to_name[] = {
     'a', 'b', 'c', 'd', 'e', 'f',  'g', 'h', 'i',  'j',
@@ -390,7 +391,6 @@ const char PROGMEM code_to_name[] = {
     ',', '.', '/',
 };
 // clang-format on
-#endif
 
 void keyball_oled_render_ballinfo(void) {
 #ifdef OLED_ENABLE
