@@ -378,6 +378,25 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   return state;
 }
 
+// ---------------------------------------------------------------------------
+// QMK native COMBO: BSPC + partner key
+// ---------------------------------------------------------------------------
+#ifdef COMBO_ENABLE
+const uint16_t PROGMEM bspc_h_combo[]    = {KC_BSPC, KC_H,    COMBO_END};
+const uint16_t PROGMEM bspc_j_combo[]    = {KC_BSPC, KC_J,    COMBO_END};
+const uint16_t PROGMEM bspc_k_combo[]    = {KC_BSPC, KC_K,    COMBO_END};
+const uint16_t PROGMEM bspc_l_combo[]    = {KC_BSPC, KC_L,    COMBO_END};
+const uint16_t PROGMEM bspc_scln_combo[] = {KC_BSPC, KC_SCLN, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(bspc_h_combo,    LALT(KC_LEFT)),
+    COMBO(bspc_j_combo,    LALT(KC_DOWN)),
+    COMBO(bspc_k_combo,    LALT(KC_UP)),
+    COMBO(bspc_l_combo,    LALT(KC_RGHT)),
+    COMBO(bspc_scln_combo, KC_QUOT),
+};
+#endif
+
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     static uint16_t auto_mouse_timer = 0;
     uint8_t highest = get_highest_layer(layer_state);

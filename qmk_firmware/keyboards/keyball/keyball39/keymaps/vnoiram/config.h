@@ -77,6 +77,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // タイピング振動でトラボが微動しても _DEFAULT_MICE に切り替わらないようにする閾値
 // CPI=3300 の場合、振動による誤検知は ±1〜3 count 程度。意図的な操作は通常 4 以上
 #define MINE_AUTO_MOUSE_THRESHOLD 4
+
+// BSPC combo: 両キーをこのms以内に押せばコンボ。単独押しはこのms後に通常送出
+#define COMBO_TERM 20
 #ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
 #    define AUTO_MOUSE_TIME MINE_AUTO_MOUSE_TIME
 #    define AUTO_MOUSE_DELAY TAPPING_TERM
